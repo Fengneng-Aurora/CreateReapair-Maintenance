@@ -1,8 +1,19 @@
 package com.aurora.createram.repair.aging.kinetic
 
 import net.minecraft.util.Mth
+import net.minecraft.world.level.block.entity.BlockEntity
 
 class KineticFactors {
+    companion object {
+        val FACTORS_SYMBOL = "AgingFactors"
+
+        fun getOrCreateFactors(blockEntity: BlockEntity): KineticFactors {
+            if (!blockEntity.persistentData.contains(FACTORS_SYMBOL))
+                return KineticFactors()
+            return KineticFactors(blockEntity.persistentData.getIntArray(FACTORS_SYMBOL))
+        }
+    }
+
     fun init () {
         calculateAbrasion()
         calculateDeformation()
@@ -13,8 +24,10 @@ class KineticFactors {
         calculateTemperature()
         calculateAverage()
     }
+    constructor() {
+    }
 
-    constructor(factors: List<Int>) {
+    constructor(factors: IntArray) {
         var count = 0
         this.average = factors[count]; count++
         this.abrasion = factors[count]; count++
@@ -80,4 +93,5 @@ class KineticFactors {
         return listOf(average, abrasion, deformation, vibration, fatigue, erosion, crack, temperature,
             lubrication, gasket, bracket, shell, layer)
     }
+
 }
