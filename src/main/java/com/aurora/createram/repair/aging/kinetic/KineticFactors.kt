@@ -1,20 +1,23 @@
 package com.aurora.createram.repair.aging.kinetic
 
+import com.aurora.createram.repair.KineticEnvironment
+import com.simibubi.create.content.kinetics.base.KineticBlockEntity
 import net.minecraft.util.Mth
 import net.minecraft.world.level.block.entity.BlockEntity
 
 class KineticFactors {
+    private var env: KineticEnvironment? = null
     companion object {
         val FACTORS_SYMBOL = "AgingFactors"
 
-        fun getOrCreateFactors(blockEntity: BlockEntity): KineticFactors {
+        fun getOrCreateFactors(blockEntity: KineticBlockEntity): KineticFactors {
             if (!blockEntity.persistentData.contains(FACTORS_SYMBOL))
                 return KineticFactors()
-            return KineticFactors(blockEntity.persistentData.getIntArray(FACTORS_SYMBOL))
+            return KineticFactors(blockEntity.persistentData.getIntArray(FACTORS_SYMBOL), KineticEnvironment(blockEntity))
         }
     }
 
-    fun calculate () {
+    fun calculate() {
         calculateAbrasion()
         calculateDeformation()
         calculateVibration()
@@ -27,7 +30,8 @@ class KineticFactors {
     constructor() {
     }
 
-    constructor(factors: IntArray) {
+    constructor(factors: IntArray, env: KineticEnvironment) {
+        this.env = env
         var count = 0
         this.average = factors[count]; count++
         this.abrasion = factors[count]; count++
