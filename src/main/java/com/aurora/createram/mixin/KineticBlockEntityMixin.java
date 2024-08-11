@@ -16,8 +16,6 @@ import java.util.List;
 
 @Mixin(KineticBlockEntity.class)
 class KineticBlockEntityMixin {
-
-
     @Inject(method = "addStressImpactStats", at = @At(value = "HEAD", remap = false))
     protected void addStressImpactStats(List<Component> tooltip, float stressAtBase, CallbackInfo ci) {
         var factors = KineticFactors.Companion.getOrCreateFactors((KineticBlockEntity) (Object) this);
@@ -25,6 +23,11 @@ class KineticBlockEntityMixin {
                 .text("Aging")
                 .style(ChatFormatting.BOLD)
                 .forGoggles(tooltip);
-        
+    }
+
+    @Inject(method = "tick", at = @At(value = "HEAD", remap = false))
+    protected void tick(CallbackInfo ci) {
+        var factors = KineticFactors.Companion.getOrCreateFactors((KineticBlockEntity) (Object) this);
+        factors.calculate();
     }
 }

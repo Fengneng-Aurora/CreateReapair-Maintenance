@@ -14,7 +14,7 @@ class KineticFactors {
         }
     }
 
-    fun init () {
+    fun calculate () {
         calculateAbrasion()
         calculateDeformation()
         calculateVibration()
@@ -41,7 +41,7 @@ class KineticFactors {
         this.gasket = factors[count]; count++
         this.bracket = factors[count]; count++
         this.temperature = factors[count]
-        init()
+        calculate()
     }
 
     var average: Int = 0
@@ -93,5 +93,4 @@ class KineticFactors {
         return listOf(average, abrasion, deformation, vibration, fatigue, erosion, crack, temperature,
             lubrication, gasket, bracket, shell, layer)
     }
-
 }
